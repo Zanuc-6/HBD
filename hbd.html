@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุขสันต์วันเกิดนะเดียร์!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap');
+
+        :root {
+            --bg-color-start: #1D2B64;
+            --bg-color-end: #F8CDDA;
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+            --primary-text-color: #ffffff;
+            --header-color: #F8CDDA;
+            --accent-color: #FFC371;
+            --shadow-color: rgba(248, 205, 218, 0.5);
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-color-start), var(--bg-color-end));
+            animation: gradient-animation 15s ease infinite;
+            background-size: 400% 400%;
+            overflow: hidden;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background: var(--card-bg-color);
+            border-radius: 20px;
+            padding: 30px 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(255, 200, 200, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            color: var(--primary-text-color);
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            animation: card-appear 1s 0.5s ease-out forwards, card-glow 3s infinite alternate;
+        }
+
+        @keyframes card-appear {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes card-glow {
+            from { box-shadow: 0 8px 32px rgba(255,255,255,0.2); }
+            to { box-shadow: 0 12px 40px rgba(255,200,113,0.5); }
+        }
+
+        h1 {
+            color: var(--header-color);
+            font-size: 2.5em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 0 15px var(--shadow-color);
+            animation: glow 2s infinite alternate, bounce 1s infinite;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px var(--shadow-color); }
+            to { text-shadow: 0 0 25px var(--shadow-color); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .wish {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 2s ease-in 1s forwards;
+        }
+
+        .from {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--accent-color);
+            opacity: 0;
+            animation: fadeIn 2s ease-in 2s forwards;
+        }
+
+        .cake {
+            margin: 25px 0;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .cake-img {
+            max-width: 220px;
+            height: auto;
+            border-radius: 15px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        canvas#confetti {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🎉 Confetti -->
+    <canvas id="confetti"></canvas>
+
+    <div class="card">
+        <h1>สุขสันต์วันเกิดจ้า เดียร์!</h1>
+        <div class="cake">
+            <img src="Celebrate Happy Birthday GIF by BEARISH.gif" 
+                 alt="Bear with Birthday Cake" 
+                 class="cake-img">
+        </div>
+        <p class="wish">
+            ขอให้มีความสุขมากๆ <br>
+            และมีแต่รอยยิ้มในทุกๆ วันนะ 🎂🎉
+        </p>
+        <p class="from">
+            - จาก พี่ทิว -
+        </p>
+    </div>
+
+    <!-- 🎵 เพลงวันเกิด -->
+    <audio autoplay loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_9bffb2d86b.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 🎊 สร้าง Confetti Effect
+        const confetti = document.getElementById('confetti');
+        const ctx = confetti.getContext('2d');
+        confetti.width = window.innerWidth;
+        confetti.height = window.innerHeight;
+
+        const pieces = Array.from({ length: 150 }, () => ({
+            x: Math.random() * confetti.width,
+            y: Math.random() * confetti.height,
+            size: Math.random() * 8 + 4,
+            color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+            speed: Math.random() * 3 + 1,
+            rotation: Math.random() * 360
+        }));
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, confetti.width, confetti.height);
+            pieces.forEach(p => {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                p.y += p.speed;
+                p.rotation += 3;
+                if (p.y > confetti.height) {
+                    p.y = -10;
+                    p.x = Math.random() * confetti.width;
+                }
+            });
+            requestAnimationFrame(drawConfetti);
+        }
+        drawConfetti();
+
+        window.addEventListener('resize', () => {
+            confetti.width = window.innerWidth;
+            confetti.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
